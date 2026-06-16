@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Philip Luo — portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --void:#070a18;
+    --void-2:#0e1230;
+    --star:#eef1ff;
+    --star-dim:#aab2d8;
+    --star-faint:#7a83ad;
+    --accent:#8fa4ff;
+    --accent-soft:#5b6bd6;
+    --glass:rgba(20,26,54,0.55);
+    --glass-hover:rgba(30,38,74,0.72);
+    --line:rgba(143,164,255,0.18);
+    --line-strong:rgba(143,164,255,0.4);
+    --shadow:0 20px 60px -24px rgba(0,0,0,0.8);
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Sora',system-ui,sans-serif;
+    color:var(--star);
+    background:var(--void);
+    min-height:100vh;
+    line-height:1.65;
+    position:relative;
+    overflow-x:hidden;
+  }
+  #sky{position:fixed;inset:0;z-index:-2;display:block;}
+  .veil{position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:radial-gradient(120% 80% at 50% 0%,rgba(7,10,24,0) 40%,rgba(7,10,24,0.55) 100%);}
+
+  .wrap{
+    max-width:680px;margin:0 auto;padding:14vh 24px 8vh;
+    min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  }
+  .hero{margin-bottom:2.4rem;opacity:0;transform:translateY(14px);animation:rise .9s var(--ease) .1s forwards;}
+  .eyebrow{
+    font-family:'Sora';font-size:13px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--accent);font-weight:600;margin-bottom:.7rem;display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{content:"";width:28px;height:1px;background:var(--accent-soft);display:inline-block;}
+  .hero h1{
+    font-family:'Sora',sans-serif;font-weight:400;font-size:clamp(2.4rem,8vw,3.5rem);
+    line-height:1.08;letter-spacing:-.02em;
+    background:linear-gradient(180deg,#ffffff,#c4ccff);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  }
+  .hero p{margin-top:.9rem;font-size:1.05rem;color:var(--star-dim);max-width:44ch;}
+
+  nav{display:flex;flex-direction:column;gap:14px;}
+  .leaf{opacity:0;transform:translateY(14px);animation:rise .8s var(--ease) forwards;}
+  .leaf:nth-child(1){animation-delay:.30s;}
+  .leaf:nth-child(2){animation-delay:.42s;}
+  .leaf:nth-child(3){animation-delay:.54s;}
+  .leaf-btn{
+    width:100%;display:flex;align-items:center;gap:16px;
+    background:var(--glass);
+    border:1px solid var(--line);
+    border-radius:18px;padding:18px 22px;cursor:pointer;text-align:left;font-family:inherit;
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    box-shadow:var(--shadow);
+    transition:transform .4s var(--ease),border-color .4s var(--ease),background .4s var(--ease);
+  }
+  .leaf-btn:hover,.leaf-btn:focus-visible{
+    transform:translateX(8px);border-color:var(--line-strong);background:var(--glass-hover);outline:none;
+  }
+  .leaf-btn:focus-visible{box-shadow:0 0 0 3px rgba(143,164,255,.35),var(--shadow);}
+  .ic{
+    width:46px;height:46px;flex:none;border-radius:50%;
+    background:rgba(143,164,255,.14);display:flex;align-items:center;justify-content:center;
+    color:var(--accent);transition:background .4s var(--ease),color .4s var(--ease);
+  }
+  .ic svg{width:22px;height:22px;}
+  .leaf-txt{flex:1;}
+  .leaf-title{font-family:'Sora',sans-serif;font-size:1.25rem;font-weight:500;color:var(--star);display:block;line-height:1.2;}
+  .leaf-sub{font-size:.82rem;color:var(--accent);font-weight:600;letter-spacing:.04em;}
+  .chev{width:20px;height:20px;flex:none;color:var(--star-faint);transition:transform .4s var(--ease);}
+  .leaf.open .chev{transform:rotate(90deg);}
+  .leaf.open .ic{background:var(--accent-soft);color:#fff;}
+
+  .panel{max-height:0;opacity:0;overflow:hidden;margin-top:0;
+    transition:max-height .5s var(--ease),opacity .45s var(--ease),margin .5s var(--ease);}
+  .leaf.open .panel{max-height:760px;opacity:1;margin-top:12px;}
+  .panel-in{
+    background:rgba(12,16,38,0.6);border:1px solid var(--line);border-radius:16px;
+    padding:22px 24px;font-size:.96rem;color:var(--star-dim);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  }
+  .panel-in p{margin-bottom:.7rem;}.panel-in p:last-child{margin-bottom:0;}
+  .proj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:2px;}
+  .proj{display:flex;flex-direction:column;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.018);transition:border-color .22s,background .22s,transform .22s;}
+  .proj:hover{border-color:var(--accent-soft);background:rgba(143,164,255,.05);transform:translateY(-2px);}
+  .proj-desc{flex:1;}
+  .proj a{font-family:'Sora',sans-serif;font-size:1.05rem;color:var(--accent);font-weight:500;text-decoration:none;}
+  .proj a:hover{text-decoration:underline;}
+  .proj span{display:block;font-size:.85rem;color:var(--star-dim);margin-top:2px;line-height:1.45;}
+  .proj .xp-role{font-size:.98rem;}
+  .proj-more{justify-content:center;align-items:center;text-align:center;border-style:dashed;}
+  .tag{display:inline-block;font-size:.72rem;font-weight:600;color:var(--accent);background:rgba(143,164,255,.13);padding:2px 10px;border-radius:20px;margin-top:6px;letter-spacing:.03em;}
+  .tags{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;}
+  .tags .tag{margin-top:0;}
+  .proj-links{display:flex;gap:14px;margin-top:8px;}
+  .proj-links a{font-size:.78rem;color:var(--accent);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:4px;}
+  .proj-links a:hover{text-decoration:underline;}
+  .proj-links svg{width:13px;height:13px;}
+  .xp{padding:16px 0;border-top:1px solid var(--line);}
+  .xp:first-of-type{border-top:none;padding-top:4px;}
+  .xp-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+  .xp-role{font-family:'Sora',sans-serif;font-size:1.02rem;font-weight:500;color:var(--star);}
+  .xp-co{font-size:.9rem;color:var(--accent);font-weight:500;}
+  .xp-date{font-size:.74rem;color:var(--star-faint);font-weight:500;white-space:nowrap;}
+  .xp-sub{font-size:.82em;opacity:.8;}
+  .xp ul{margin:8px 0 0;padding-left:0;list-style:none;}
+  .xp li{font-size:.86rem;color:var(--star-dim);line-height:1.5;padding-left:16px;position:relative;margin-bottom:5px;}
+  .xp li::before{content:"";position:absolute;left:2px;top:9px;width:4px;height:4px;border-radius:50%;background:var(--accent-soft);}
+  .links{display:flex;flex-direction:column;gap:12px;}
+  .links a{display:flex;align-items:center;gap:11px;color:var(--star-dim);text-decoration:none;font-weight:500;transition:color .3s;}
+  .links a:hover{color:var(--accent);}
+  .links svg{width:19px;height:19px;flex:none;}
+  .avatar{display:flex;align-items:center;gap:13px;margin-bottom:14px;}
+  .avatar .circle{width:48px;height:48px;border-radius:50%;background:var(--accent-soft);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:500;}
+  .avatar b{font-family:'Sora',sans-serif;font-weight:500;color:var(--star);font-size:1.05rem;display:block;}
+  .avatar small{color:var(--accent);font-weight:600;}
+  footer{margin-top:3rem;text-align:center;font-size:.78rem;color:var(--star-faint);opacity:0;animation:rise 1s var(--ease) .7s forwards;}
+
+  @keyframes rise{to{opacity:1;transform:translateY(0);}}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition-duration:.01ms!important;}
+    .hero,.leaf,footer{opacity:1;transform:none;}
+  }
+  @media(max-width:480px){
+    .wrap{padding:11vh 18px 6vh;}
+    .leaf-btn{padding:16px 18px;gap:13px;}
+  }
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+
+<main class="wrap">
+  <header class="hero">
+    <div class="eyebrow">software engineer</div>
+    <h1>Philip Luo</h1>
+    <p>Full-stack engineer who likes building things end to end — from Flask APIs and React frontends to the infrastructure underneath. Currently at Analytic Partners.</p>
+  </header>
+
+  <nav aria-label="Portfolio sections">
+
+    <div class="leaf">
+      <button class="leaf-btn" aria-expanded="false" aria-controls="p-about">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span>
+        <span class="leaf-txt"><span class="leaf-title">about me</span><span class="leaf-sub">who i am</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <div class="panel" id="p-about" role="region">
+        <div class="panel-in">
+          <div class="avatar">
+            <span class="circle">PL</span>
+            <span><b>Philip Luo</b><small>software engineer · Montreal</small></span>
+          </div>
+          <p>I'm a full-stack software engineer and a 2025 McGill computer science grad, now building software at Analytic Partners. I like owning a problem from the database all the way to the interface — designing the APIs, wiring up the frontend, and setting up the infrastructure that keeps it running.</p>
+          <p>Outside of work I'm drawn to projects with a bit of a puzzle to them: an LLM that turns chat into legal chess moves, a distributed system that resolves conflicts with consensus. I care about software that's reliable, and that feels good to use.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="leaf">
+      <button class="leaf-btn" aria-expanded="false" aria-controls="p-experience">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></span>
+        <span class="leaf-txt"><span class="leaf-title">experience</span><span class="leaf-sub">where i've worked</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <div class="panel" id="p-experience" role="region">
+        <div class="panel-in">
+          <div class="xp">
+            <div class="xp-head"><span class="xp-role">Software Engineer<br><em class="xp-sub">Software Engineer Intern</em></span><span class="xp-date">Jan 2026 — present<br><em class="xp-sub">May 2025 — Dec 2025</em></span></div>
+            <div class="xp-co">Analytic Partners</div>
+            <ul>
+              <li>Built a Power BI dashboard tool that ingests data once into Azure SQL and serves on-demand updates via live queries, removing a recurring 30-minute API dependency.</li>
+              <li>Designed an end-to-end document-upload portal with a multi-stage publish workflow — Flask REST APIs, a React/Redux frontend, and MySQL — serving 400+ users.</li>
+              <li>Architected a microservices file-storage system on AWS S3 coordinating processing across Linux and Windows services.</li>
+              <li>Cut an OCR extraction pipeline's runtime by 30% by parallelizing file processing.</li>
+            </ul>
+          </div>
+          <div class="xp">
+            <div class="xp-head"><span class="xp-role">Undergraduate Researcher</span><span class="xp-date">Jan — May 2025</span></div>
+            <div class="xp-co">McGill University</div>
+            <ul>
+              <li>Built a Chrome extension that pulls YouTube transcripts, runs NLP keyword extraction, and queries the Google Fact Check API to surface relevant fact-checked articles — adopted by a McGill professor and continued by later students.</li>
+              <li>Full stack in React, Flask, and MongoDB, containerized with Docker Compose.</li>
+            </ul>
+          </div>
+          <div class="xp">
+            <div class="xp-head"><span class="xp-role">Full-Stack Developer Intern</span><span class="xp-date">Sep — Dec 2022</span></div>
+            <div class="xp-co">Société Générale</div>
+            <ul>
+              <li>Developed a reusable key-value feature for a slide tool, reducing cross-slide duplication.</li>
+              <li>Full stack with React, Spring Boot, and PostgreSQL; tested with Jest.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="leaf">
+      <button class="leaf-btn" aria-expanded="false" aria-controls="p-projects">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></span>
+        <span class="leaf-txt"><span class="leaf-title">projects</span><span class="leaf-sub">what i've built</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <div class="panel" id="p-projects" role="region">
+        <div class="panel-in">
+          <div class="proj-grid">
+            <div class="proj">
+              <span class="xp-role" style="display:block;">Phonetic Chess</span>
+              <span class="proj-desc">A two-player chess web app that translates natural-language chat into legal moves via the Groq LLM API, conditioning each inference on prior message sentiment to disambiguate intent across turns. Three containers behind an Nginx reverse proxy, deployed on AWS EC2.</span>
+              <div class="tags"><span class="tag">React</span><span class="tag">Flask</span><span class="tag">Socket.IO</span><span class="tag">PostgreSQL</span><span class="tag">Docker</span></div>
+              <div class="proj-links">
+                <a href="https://github.com/yoman321/phonetic-chess" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.9-1.29 2.74-1.02 2.74-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>code</a>
+              </div>
+            </div>
+            <div class="proj">
+              <span class="xp-role" style="display:block;">Healthy UI</span>
+              <span class="proj-desc">McGill AI Ethics Lab research into the negative effects of recommender systems — a Chrome extension and web app that surfaces and counters manipulative recommendation patterns across platforms like YouTube and news feeds. React front end, Flask service, and Go utilities for the external API integrations.</span>
+              <div class="tags"><span class="tag">React</span><span class="tag">TypeScript</span><span class="tag">Flask</span><span class="tag">Go</span><span class="tag">Chrome Extension</span></div>
+              <div class="proj-links">
+                <a href="https://github.com/mcgill-ai-ethics/healthy-ui" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.9-1.29 2.74-1.02 2.74-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>code</a>
+              </div>
+            </div>
+            <div class="proj">
+              <span class="xp-role" style="display:block;">Distributed Treasure Hunt</span>
+              <span class="proj-desc">Implemented Multi-Paxos in Java to resolve treasure-claim conflicts when players land on the same cell, modeling each contested claim as a consensus decision across peer nodes. Peers coordinate over UDP broadcast, with leader re-election keeping the protocol live through proposer failures.</span>
+              <div class="tags"><span class="tag">Java</span><span class="tag">Multi-Paxos</span><span class="tag">UDP</span><span class="tag">Distributed systems</span></div>
+            </div>
+            <div class="proj proj-more">
+              <a href="https://github.com/yoman321" target="_blank" rel="noopener">more on github →</a>
+              <span class="proj-desc">Everything else I've been tinkering with.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="leaf">
+      <button class="leaf-btn" aria-expanded="false" aria-controls="p-skills">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 00-2 2v3m0 8v3a2 2 0 002 2h3m8-18h3a2 2 0 012 2v3m0 8v3a2 2 0 01-2 2h-3"/></svg></span>
+        <span class="leaf-txt"><span class="leaf-title">skills</span><span class="leaf-sub">my toolkit</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <div class="panel" id="p-skills" role="region">
+        <div class="panel-in">
+          <p style="color:var(--accent);font-weight:600;font-size:.8rem;margin-bottom:6px;">languages</p>
+          <div class="tags" style="margin-bottom:14px;"><span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">Python</span><span class="tag">Java</span><span class="tag">C</span><span class="tag">Bash</span><span class="tag">SQL</span></div>
+          <p style="color:var(--accent);font-weight:600;font-size:.8rem;margin-bottom:6px;">frameworks</p>
+          <div class="tags" style="margin-bottom:14px;"><span class="tag">React</span><span class="tag">Redux</span><span class="tag">Node / Express</span><span class="tag">Flask</span><span class="tag">Spring Boot</span><span class="tag">Socket.IO</span><span class="tag">Pandas</span></div>
+          <p style="color:var(--accent);font-weight:600;font-size:.8rem;margin-bottom:6px;">databases</p>
+          <div class="tags" style="margin-bottom:14px;"><span class="tag">PostgreSQL</span><span class="tag">MySQL</span><span class="tag">Azure SQL</span><span class="tag">MongoDB</span></div>
+          <p style="color:var(--accent);font-weight:600;font-size:.8rem;margin-bottom:6px;">infrastructure</p>
+          <div class="tags"><span class="tag">AWS (EC2 · S3)</span><span class="tag">Docker</span><span class="tag">Nginx</span><span class="tag">RabbitMQ</span><span class="tag">Heroku</span><span class="tag">Netlify</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="leaf">
+      <button class="leaf-btn" aria-expanded="false" aria-controls="p-contact">
+        <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>
+        <span class="leaf-txt"><span class="leaf-title">contact me</span><span class="leaf-sub">say hello</span></span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+      </button>
+      <div class="panel" id="p-contact" role="region">
+        <div class="panel-in">
+          <div class="links">
+            <a href="mailto:luophilipe@gmail.com">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+              luophilipe@gmail.com
+            </a>
+            <a href="tel:+15149943898">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.8 19.8 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.8 19.8 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.13.96.36 1.9.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0122 16.92z"/></svg>
+              +1 514 994 3898
+            </a>
+            <a href="https://github.com/yoman321" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.1-1.47-1.1-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.6 9.6 0 015 0c1.9-1.29 2.74-1.02 2.74-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
+              github.com/yoman321
+            </a>
+            <a href="https://www.linkedin.com/in/philip-luo-344040152/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.34 17V10.3H6.13V17h2.21zM7.23 9.39a1.28 1.28 0 100-2.56 1.28 1.28 0 000 2.56zM18 17v-3.67c0-1.96-.42-3.47-2.71-3.47-1.1 0-1.84.6-2.14 1.18h-.03V10.3H10.9V17h2.21v-3.32c0-.88.17-1.73 1.25-1.73 1.07 0 1.09 1 1.09 1.79V17H18z"/></svg>
+              linkedin.com/in/philip-luo
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </nav>
+
+  <footer>made with javascript &amp; a love of the night sky · Philip Luo</footer>
+</main>
+
+<script>
+  const leaves = Array.from(document.querySelectorAll('.leaf'));
+  leaves.forEach(leaf=>{
+    const btn = leaf.querySelector('.leaf-btn');
+    btn.addEventListener('click', ()=>{
+      const isOpen = leaf.classList.contains('open');
+      leaves.forEach(l=>{l.classList.remove('open');l.querySelector('.leaf-btn').setAttribute('aria-expanded','false');});
+      if(!isOpen){leaf.classList.add('open');btn.setAttribute('aria-expanded','true');}
+    });
+  });
+
+  const c=document.getElementById('sky'),x=c.getContext('2d');
+  let W,H,DPR=Math.min(devicePixelRatio||1,2);
+  // Positions for stars/astronaut are normalized (0..1) so the whole scene stretches
+  // and compresses with the viewport instead of being reshuffled on resize.
+  function size(){
+    const pw=W,ph=H;
+    W=innerWidth;H=innerHeight;c.width=W*DPR;c.height=H*DPR;x.setTransform(DPR,0,0,DPR,0,0);
+    // Keep the astronaut in the same relative spot as the world rescales.
+    if(astro&&astro.init&&pw&&ph){astro.x*=W/pw;astro.y*=H/ph;}
+  }
+
+  // Stars are seeded once in normalized space; resizing just remaps them to pixels.
+  const far=[];
+  function seedFar(){const n=Math.round(W*H/9000);for(let i=0;i<n;i++)far.push({nx:Math.random(),ny:Math.random(),r:Math.random()*0.9+0.2,a:Math.random()*0.5+0.2,tw:Math.random()*Math.PI*2,sp:Math.random()*0.25+0.04});}
+
+  const stars=[];
+  const stellar=[
+    [255,255,255],[255,250,244],[255,246,234],
+    [255,238,220],[255,226,196],[255,210,168],
+    [255,190,150],[202,216,255],[180,200,255],[214,224,255]
+  ];
+  function seedStars(){const n=Math.min(80,Math.round(W*H/16000));for(let i=0;i<n;i++){const col=stellar[Math.floor(Math.random()*stellar.length)];stars.push({nx:Math.random(),ny:Math.random(),r:Math.random()*1.5+1,bright:Math.random()>0.84,tw:Math.random()*Math.PI*2,c:col});}}
+
+  let mx=-999,my=-999;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  addEventListener('mouseleave',()=>{mx=-999;my=-999;});
+
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  function drawAstronaut(cx,cy,scale,rot){
+    x.save();x.translate(cx,cy);x.rotate(rot);x.scale(scale,scale);
+    x.lineCap='round';x.lineJoin='round';
+    const suit='#e8ecf6',suitSh='#c2c8de',line='#9aa2c4';
+    x.strokeStyle='rgba(180,200,255,0.25)';x.lineWidth=14;
+    x.beginPath();x.arc(0,-2,30,0,7);x.stroke();
+    x.lineWidth=3.5;x.strokeStyle=line;
+    x.beginPath();x.moveTo(-13,16);x.lineTo(-20,34);x.moveTo(13,16);x.lineTo(20,34);x.stroke();
+    x.fillStyle=suit;
+    x.beginPath();x.arc(-22,36,5,0,7);x.fill();
+    x.beginPath();x.arc(22,36,5,0,7);x.fill();
+    x.beginPath();x.moveTo(-16,-6);x.lineTo(16,-6);x.lineTo(22,4);x.lineTo(16,-2);x.lineTo(-16,-2);x.lineTo(-22,4);x.closePath();
+    x.strokeStyle=line;x.lineWidth=3.5;x.stroke();
+    x.fillStyle=suitSh;x.beginPath();x.roundRect(-13,-22,26,8,4);x.fill();
+    x.fillStyle=suit;
+    x.beginPath();x.roundRect(-16,-14,32,30,11);x.fill();
+    x.fillStyle=suitSh;x.beginPath();x.roundRect(-7,16,14,16,6);x.fill();
+    x.fillStyle=suit;x.beginPath();x.roundRect(-13,15,26,5,2.5);x.fill();
+    x.fillStyle=suit;x.strokeStyle=suitSh;x.lineWidth=3;
+    x.beginPath();x.arc(0,-16,17,0,7);x.fill();x.stroke();
+    const vis=x.createLinearGradient(-12,-26,12,-6);
+    vis.addColorStop(0,'#3a4a78');vis.addColorStop(0.5,'#26305a');vis.addColorStop(1,'#161d3e');
+    x.fillStyle=vis;x.beginPath();x.ellipse(0,-16,12,11,0,0,7);x.fill();
+    x.fillStyle='rgba(190,210,255,0.55)';x.beginPath();x.ellipse(-4,-20,3.5,2.2,-0.5,0,7);x.fill();
+    x.restore();
+  }
+
+  function drawPlanet(px,py,r,col,ring){
+    x.save();x.translate(px,py);
+    x.fillStyle='rgba('+col[0]+','+col[1]+','+col[2]+',0.18)';
+    x.beginPath();x.arc(0,0,r*1.8,0,7);x.fill();
+    const pg=x.createRadialGradient(-r*0.35,-r*0.35,r*0.1,0,0,r);
+    pg.addColorStop(0,'rgba('+Math.min(255,col[0]+40)+','+Math.min(255,col[1]+40)+','+Math.min(255,col[2]+40)+',1)');
+    pg.addColorStop(1,'rgba('+col[0]+','+col[1]+','+col[2]+',1)');
+    x.fillStyle=pg;x.beginPath();x.arc(0,0,r,0,7);x.fill();
+    x.fillStyle='rgba(0,0,0,0.22)';x.beginPath();x.arc(r*0.32,r*0.32,r,0,7);x.globalCompositeOperation='source-atop';x.fill();x.globalCompositeOperation='source-over';
+    if(ring){
+      x.strokeStyle='rgba('+col[0]+','+col[1]+','+col[2]+',0.7)';x.lineWidth=r*0.18;
+      x.beginPath();x.ellipse(0,0,r*1.9,r*0.62,-0.4,0,7);x.stroke();
+    }
+    x.restore();
+  }
+  const planets=[
+    {rad:1.55,base:0,speed:0.22,r:7,col:[150,180,235],ring:false},
+    {rad:2.45,base:2.1,speed:0.13,r:11,col:[225,170,120],ring:true}
+  ];
+  const astro={x:0,y:0,vx:0.6,vy:0.3,rot:0,spin:0,wt:Math.random()*10,init:false};
+
+  // Bootstrap once astro exists (size() rescales astro on resize). No reseeding on resize —
+  // the world stretches/compresses because all positions are normalized.
+  size();seedFar();seedStars();
+  addEventListener('resize',size);
+
+  let asteroids=[],nextShower=60;
+  const ASTRO_Z=1.0;
+  // Asteroids wrap across side borders, and may recede into the distance and exit (z>A_ZFAR),
+  // but can't fly out toward the viewer: they bounce off the near plane (A_ZMIN). Cap the count.
+  const A_CAP=26,A_BUF=150,A_ZMIN=0.34,A_ZFAR=3.8;
+  function spawnShower(){
+    const room=A_CAP-asteroids.length;
+    if(room<=0)return;
+    const fromLeft=Math.random()>0.5;
+    const ang=(fromLeft? (Math.random()*0.5-0.1) : (Math.PI-Math.random()*0.5+0.1));
+    const speed=2.0+Math.random()*1.4;
+    const n=Math.min(room,9+Math.floor(Math.random()*8));
+    const baseY=Math.random()*H*0.7;
+    const outward=Math.random()>0.5;
+    for(let i=0;i<n;i++){
+      const sx=fromLeft?-30:W+30;
+      const z=outward? (1.8+Math.random()*1.0) : (0.5+Math.random()*0.35);
+      const vz=outward? -(0.004+Math.random()*0.004) : (0.004+Math.random()*0.004);
+      asteroids.push({
+        x:sx+(Math.random()*80-40),
+        y:baseY+(Math.random()*200-100),
+        vx:Math.cos(ang)*speed,vy:Math.sin(ang)*speed,
+        z:z,vz:vz,
+        r:3+Math.random()*5,rot:Math.random()*7,vr:(Math.random()-0.5)*0.18,
+        hit:false
+      });
+    }
+  }
+  function drawAsteroid(a){
+    const sc=1/a.z;
+    const rr=a.r*sc;
+    x.save();x.translate(a.x,a.y);x.rotate(a.rot);
+    const grd=x.createRadialGradient(-rr*0.3,-rr*0.3,rr*0.1,0,0,rr);
+    grd.addColorStop(0,'#b8aa98');grd.addColorStop(1,'#6e6358');
+    x.fillStyle=grd;x.beginPath();
+    const pts=7;
+    for(let i=0;i<pts;i++){const a2=i/pts*Math.PI*2,pr=rr*(0.75+((i*37)%10)/16);if(i===0)x.moveTo(Math.cos(a2)*pr,Math.sin(a2)*pr);else x.lineTo(Math.cos(a2)*pr,Math.sin(a2)*pr);}
+    x.closePath();x.fill();
+    x.fillStyle='rgba(0,0,0,0.18)';x.beginPath();x.arc(rr*0.2,rr*0.2,rr*0.35,0,7);x.fill();
+    x.restore();
+  }
+
+  let t=0;
+  function frame(){
+    const g=x.createLinearGradient(0,0,0,H);
+    g.addColorStop(0,'#070a18');g.addColorStop(0.55,'#0e1230');g.addColorStop(1,'#15123a');
+    x.fillStyle=g;x.fillRect(0,0,W,H);
+
+    const sx=W*0.82,sy=H*0.2,pulse=1+Math.sin(t*1.2)*0.04,core=Math.max(38,Math.min(64,W*0.05));
+    const eclipse=core*4.2;
+    function vis(px,py){const d=Math.hypot(px-sx,py-sy);return d>eclipse?1:Math.max(0,(d-core*1.1)/(eclipse-core*1.1));}
+
+    for(const s of far){
+      if(!reduce){s.nx+=s.sp*0.12/W;if(s.nx>1)s.nx-=1;}
+      const px=s.nx*W,py=s.ny*H;
+      const tw=0.6+Math.sin(t*2+s.tw)*0.4;
+      x.fillStyle='rgba(200,210,255,'+s.a*tw*vis(px,py)+')';
+      x.beginPath();x.arc(px,py,s.r,0,7);x.fill();
+    }
+
+    for(const n of stars){n._x=n.nx*W;n._y=n.ny*H;}
+    for(let i=0;i<stars.length;i++)for(let j=i+1;j<stars.length;j++){
+      const a=stars[i],b=stars[j],d=Math.hypot(a._x-b._x,a._y-b._y);
+      if(d<124){const lv=Math.min(vis(a._x,a._y),vis(b._x,b._y));x.strokeStyle='rgba(150,170,255,'+(1-d/124)*0.5*lv+')';x.lineWidth=0.7;x.beginPath();x.moveTo(a._x,a._y);x.lineTo(b._x,b._y);x.stroke();}
+    }
+
+    for(const n of stars){
+      const tw=(0.7+Math.sin(t*2.5+n.tw)*0.3)*vis(n._x,n._y);
+      if(tw<=0.01)continue;
+      const r=n.c[0],g2=n.c[1],b2=n.c[2];
+      if(n.bright){
+        x.fillStyle='rgba('+r+','+g2+','+b2+','+0.16*tw+')';x.beginPath();x.arc(n._x,n._y,n.r*3.4,0,7);x.fill();
+        x.strokeStyle='rgba('+r+','+g2+','+b2+','+0.45*tw+')';x.lineWidth=0.6;
+        x.beginPath();x.moveTo(n._x-n.r*3,n._y);x.lineTo(n._x+n.r*3,n._y);x.moveTo(n._x,n._y-n.r*3);x.lineTo(n._x,n._y+n.r*3);x.stroke();
+      }
+      x.fillStyle='rgba('+r+','+g2+','+b2+','+tw+')';x.beginPath();x.arc(n._x,n._y,n.r,0,7);x.fill();
+    }
+
+    const halo=x.createRadialGradient(sx,sy,0,sx,sy,core*7*pulse);
+    halo.addColorStop(0,'rgba(255,224,178,0.55)');
+    halo.addColorStop(0.18,'rgba(255,196,150,0.22)');
+    halo.addColorStop(0.45,'rgba(186,160,220,0.10)');
+    halo.addColorStop(1,'rgba(186,160,220,0)');
+    x.fillStyle=halo;x.fillRect(0,0,W,H);
+    const orb=x.createRadialGradient(sx,sy,0,sx,sy,core*pulse);
+    orb.addColorStop(0,'rgba(255,247,232,0.95)');
+    orb.addColorStop(0.55,'rgba(255,221,170,0.85)');
+    orb.addColorStop(1,'rgba(255,200,150,0)');
+
+    const oT=reduce?1.0:t;
+    for(const pl of planets){
+      const a=pl.base+oT*pl.speed;
+      pl.cx=sx+Math.cos(a)*core*pl.rad;
+      pl.cy=sy+Math.sin(a)*core*pl.rad*0.42;
+      pl.front=Math.sin(a)>0;
+      x.strokeStyle='rgba(160,150,210,0.10)';x.lineWidth=1;
+      x.beginPath();x.ellipse(sx,sy,core*pl.rad,core*pl.rad*0.42,0,0,7);x.stroke();
+    }
+    for(const pl of planets)if(!pl.front)drawPlanet(pl.cx,pl.cy,pl.r,pl.col,pl.ring);
+    x.fillStyle=orb;x.beginPath();x.arc(sx,sy,core*pulse,0,7);x.fill();
+    for(const pl of planets)if(pl.front)drawPlanet(pl.cx,pl.cy,pl.r,pl.col,pl.ring);
+
+    const ascale=Math.min(1.15,Math.max(0.85,W/900));
+    if(!astro.init){astro.x=W*0.5;astro.y=H*0.34;astro.init=true;}
+    const hitR=44*ascale,margin=46*ascale;
+    if(reduce){
+      astro.x=W*0.5;astro.y=H*0.32;astro.rot=0;
+    }else{
+      astro.wt+=0.008;
+      astro.vx+=Math.cos(astro.wt*1.3)*0.006+Math.cos(astro.wt*0.5)*0.004;
+      astro.vy+=Math.sin(astro.wt*1.1)*0.006+Math.sin(astro.wt*0.7)*0.004;
+      const dx=astro.x-mx,dy=astro.y-my,d=Math.hypot(dx,dy);
+      if(d<hitR&&d>0){const f=(hitR-d)/hitR*1.4;astro.vx+=dx/d*f;astro.vy+=dy/d*f;astro.spin+=(dx*astro.vy-dy*astro.vx)*0.0008;}
+      astro.vx*=0.992;astro.vy*=0.992;
+      astro.x+=astro.vx;astro.y+=astro.vy;
+      if(astro.x<margin){astro.x=margin;astro.vx=Math.abs(astro.vx)*0.7;}
+      if(astro.x>W-margin){astro.x=W-margin;astro.vx=-Math.abs(astro.vx)*0.7;}
+      if(astro.y<margin){astro.y=margin;astro.vy=Math.abs(astro.vy)*0.7;}
+      if(astro.y>H-margin){astro.y=H-margin;astro.vy=-Math.abs(astro.vy)*0.7;}
+      astro.spin*=0.97;
+      astro.rot+=astro.spin*0.02+astro.vx*0.012;
+    }
+
+    if(!reduce){
+      nextShower--;
+      if(nextShower<=0){spawnShower();nextShower=1700+Math.floor(Math.random()*500);}
+      const wrapX=W+A_BUF*2,wrapY=H+A_BUF*2;
+      for(const a of asteroids){
+        const sc=1/a.z;
+        a.x+=a.vx*sc;a.y+=a.vy*sc;a.z+=a.vz;a.rot+=a.vr;
+        // Near plane: can't fly out toward the viewer — bounce back into the distance.
+        // Far side has no bound: it's free to recede and exit (culled below at z>A_ZFAR).
+        if(a.z<A_ZMIN){a.z=A_ZMIN;a.vz=Math.abs(a.vz);}
+        // Wrap across borders: exit one edge, re-enter from the opposite one.
+        if(a.x<-A_BUF)a.x+=wrapX;else if(a.x>W+A_BUF)a.x-=wrapX;
+        if(a.y<-A_BUF)a.y+=wrapY;else if(a.y>H+A_BUF)a.y-=wrapY;
+        // Collision, re-armable so a wrapping asteroid can bump the astronaut again later.
+        if(a.z>ASTRO_Z){
+          const rr=a.r*sc;const dx=astro.x-a.x,dy=astro.y-a.y,d=Math.hypot(dx,dy),hit=rr+38*ascale;
+          if(!a.hit&&d<hit&&d>0){
+            const f=Math.min(1.6,(a.r/4))*1.3;
+            astro.vx+=a.vx*sc*0.32+dx/d*f;astro.vy+=a.vy*sc*0.32+dy/d*f;
+            astro.spin+=(a.vx*dy-a.vy*dx)*0.0009;a.hit=true;
+          }else if(a.hit&&d>hit*1.8){a.hit=false;}
+        }else a.hit=false;
+      }
+      // Cull only those that have receded into deep space; the field refills via showers.
+      asteroids=asteroids.filter(a=>a.z<=A_ZFAR);
+      asteroids.sort((p,q)=>q.z-p.z);
+      for(const a of asteroids)drawAsteroid(a);
+    }
+
+    const asp=Math.hypot(astro.vx,astro.vy),amax=4.6;
+    if(asp>amax){astro.vx*=amax/asp;astro.vy*=amax/asp;}
+
+    drawAstronaut(astro.x,astro.y,ascale,astro.rot);
+
+    t+=0.012;requestAnimationFrame(frame);
+  }
+  frame();
+</script>
+</body>
+</html>
