@@ -142,6 +142,11 @@
     .wrap{padding:11vh 18px 6vh;}
     .leaf-btn{padding:16px 18px;gap:13px;}
   }
+  /* At tall viewports, cap the vertical padding so the collapsed layout
+     fits within the viewport instead of letting vh padding grow with it. */
+  @media(min-height:900px){
+    .wrap{padding-top:80px;padding-bottom:64px;}
+  }
 </style>
 </head>
 <body>
