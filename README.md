@@ -5,6 +5,9 @@ constellations, a glowing sun with orbiting planets, a bumpable astronaut, and
 periodic depth-aware asteroid showers — is hand-coded in plain JavaScript and
 HTML5 canvas. No images, no libraries, no external assets.
 
+# Link
+https://philip-luo.netlify.app/
+
 ## What it is
 
 An interactive night-sky landing page with an expanding glass-card menu
@@ -22,11 +25,6 @@ the front door, and the real content sits one tap behind it.
 ## Run it
 
 Open `index.html` in any modern browser. That's it.
-
-## Deploy it
-
-- **Netlify** — drag the file onto [Netlify Drop](https://app.netlify.com/drop)
-- **GitHub Pages** — push to a `yoman321.github.io` repo and enable Pages
 
 ## Accessibility
 
