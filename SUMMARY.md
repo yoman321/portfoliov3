@@ -148,9 +148,10 @@ to front so depth reads correctly.
   the same world** rather than reseeding it — the scene stays coherent from phones to
   ultrawide displays, and the astronaut keeps its relative spot. The project grid and
   layout collapse cleanly on mobile.
-- **Self-contained & light:** one HTML file, no images, no libraries, no network
-  requests beyond the Google Fonts stylesheet — so it loads instantly and can never
-  break from a missing external asset.
+- **Self-contained & light:** one HTML file, no libraries, no network requests
+  beyond the Google Fonts stylesheet. The only raster image — the profile photo in
+  *about me* — is embedded inline as an optimized base64 data URI, so there are still
+  no external assets and nothing that can break from a missing file.
 
 ---
 
