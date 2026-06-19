@@ -40,7 +40,7 @@
     background:radial-gradient(120% 80% at 50% 0%,rgba(7,10,24,0) 40%,rgba(7,10,24,0.55) 100%);}
 
   .wrap{
-    max-width:680px;margin:0 auto;padding:14vh 24px 8vh;
+    max-width:680px;margin:0 auto;padding:8vh 24px 6vh;
     min-height:100vh;display:flex;flex-direction:column;justify-content:center;
   }
   .hero{display:flex;align-items:center;gap:30px;margin-bottom:2.4rem;opacity:0;transform:translateY(14px);animation:rise .9s var(--ease) .1s forwards;}
@@ -62,7 +62,7 @@
   .hero p{margin-top:.9rem;font-size:1.05rem;color:var(--star-dim);max-width:44ch;}
 
   nav{display:flex;flex-direction:column;gap:14px;}
-  .leaf{opacity:0;transform:translateY(14px);animation:rise .8s var(--ease) forwards;}
+  .leaf{opacity:0;transform:translateY(14px);animation:rise .8s var(--ease) forwards;scroll-margin-top:24px;}
   .leaf:nth-child(1){animation-delay:.30s;}
   .leaf:nth-child(2){animation-delay:.42s;}
   .leaf:nth-child(3){animation-delay:.54s;}
@@ -192,6 +192,20 @@
      fits within the viewport instead of letting vh padding grow with it. */
   @media(min-height:900px){
     .wrap{padding-top:80px;padding-bottom:64px;}
+  }
+  /* On shorter viewports the collapsed layout (hero + five cards + footer) is
+     taller than the screen, so compress spacing and the hero/card sizing until
+     it fits in one viewport without a scrollbar. */
+  @media(max-height:1040px){
+    .wrap{padding:4vh 24px 3vh;}
+    .hero{gap:22px;margin-bottom:1.3rem;}
+    .hero-photo{width:150px;}
+    nav{gap:10px;}
+    .leaf-btn{padding:14px 20px;}
+    .ic{width:40px;height:40px;}
+    .ic svg{width:20px;height:20px;}
+    .leaf-title{font-size:1.15rem;}
+    footer{margin-top:1.3rem;}
   }
 </style>
 </head>
@@ -367,7 +381,19 @@
     btn.addEventListener('click', ()=>{
       const isOpen = leaf.classList.contains('open');
       leaves.forEach(l=>{l.classList.remove('open');l.querySelector('.leaf-btn').setAttribute('aria-expanded','false');});
-      if(!isOpen){leaf.classList.add('open');btn.setAttribute('aria-expanded','true');}
+      if(!isOpen){
+        leaf.classList.add('open');btn.setAttribute('aria-expanded','true');
+        // Once the panel finishes expanding (so its final height is known), scroll
+        // the opened card to the centre of the screen — no manual scrolling needed.
+        const panel=leaf.querySelector('.panel');
+        const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+        const center=()=>leaf.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+        if(reduce){center();}
+        else{
+          const onEnd=e=>{if(e.target===panel&&e.propertyName==='max-height'){panel.removeEventListener('transitionend',onEnd);center();}};
+          panel.addEventListener('transitionend',onEnd);
+        }
+      }
     });
   });
 
