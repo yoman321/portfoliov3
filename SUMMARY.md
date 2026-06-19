@@ -90,8 +90,11 @@ to front so depth reads correctly.
 
 ### The astronaut
 
-- A minimal figure hand-drawn from canvas shapes (helmet, gradient visor with a
-  highlight glint, backpack, limbs, soft glow ring).
+- A **penguin in an astronaut suit**, hand-drawn from canvas shapes with a true
+  penguin silhouette: an oval white suit body, small wing-like flippers hugging the
+  sides, little orange webbed feet, a chest control panel, a life-support backpack,
+  a soft glow ring, and a domed helmet whose visor frames the penguin's face —
+  white mask, eyes, and orange beak.
 - Has **true free-floating momentum**: a real position and velocity rather than a
   fixed path. It wanders gently on its own via a soft drifting force.
 - **Bumpable:** moving the cursor into it transfers momentum and a little spin,
