@@ -79,6 +79,10 @@
     transform:translateX(8px);border-color:var(--line-strong);background:var(--glass-hover);outline:none;
   }
   .leaf-btn:focus-visible{box-shadow:0 0 0 3px rgba(143,164,255,.35),var(--shadow);}
+  /* Custom press feedback (replaces the default mobile tap-highlight): a quick
+     scale-down while the card is held, snapping back on release. */
+  .leaf-btn:active{transform:scale(.97);transition:transform .12s var(--ease);background:var(--glass-hover);}
+  @media(hover:hover){.leaf-btn:hover:active{transform:translateX(8px) scale(.97);}}
   .ic{
     width:46px;height:46px;flex:none;border-radius:50%;
     background:rgba(143,164,255,.14);display:flex;align-items:center;justify-content:center;
@@ -149,6 +153,7 @@
   }
   .scroll-cue svg{width:26px;height:26px;}
   .scroll-cue:hover,.scroll-cue:focus-visible{opacity:1;outline:none;}
+  .scroll-cue:active{opacity:1;animation:none;transform:translate(-50%,3px);}
   .scroll-cue.hide{opacity:0;pointer-events:none;}
   @keyframes cue-bounce{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,7px);}}
 
